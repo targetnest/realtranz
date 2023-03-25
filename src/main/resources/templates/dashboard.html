@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <title>::Dashboard::</title>
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet"/>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css"/>
+</head>
+<body class="sb-nav-fixed">
+<style>
+    #sidebarToggle{
+       display:none;
+    }
+    .navbar-nav{
+       margin-left:auto;
+    }
+
+</style>
+<div th:replace="header"></div><br/><br/><br/>
+        <main>
+            <div class="container-fluid px-4" style="width:98%">
+
+                <div class="row">
+                    <div th:if="null != ${successEnq}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:inline="text" th:utext="${successEnq}"></span>
+                        <button type="button" class="close" >
+                            <a href="/"><span aria-hidden="true">&times;</span></a>
+                        </button>
+                    </div>
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <div class="input-group mb-3">
+
+                            <select class="form-control ventureDropDownList">
+                                <option th:each="venture : ${userVentures}" th:value="${venture.ventureName}" th:text="${venture.description}"></option>
+                            </select>
+                          <!--  <button class="btn btn-outline-primary input-group-append disabled" type="button" id="button-addon2"></button>-->
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <a href="" class="btn btn-primary" id="plotstatus" target="_blank">Layout Status</a>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-2 col-md-2 mb-4">
+                        <div class="card border-left-primary shadow">
+                            <div class="card-body">
+                                <div class="text font-weight-bold text-primary text-uppercase">
+                                    Total Plots:<input id="total-plots" style="border:none;background-color:white;font-size:18px;width:60px;" disabled></input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-2 mb-4">
+                        <div class="card border-left-success shadow">
+                            <div class="card-body">
+                                <div class="text font-weight-bold text-success text-uppercase">
+                                    Available Plots:<input id="available-plots" style="border:none;background-color:white;font-size:18px;width:60px;" disabled></input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-2 mb-4">
+                        <div class="card border-left-danger shadow">
+                            <div class="card-body">
+                                <div class="text font-weight-bold text-danger text-uppercase">
+                                    Sold Plots:<input id="sold-plots" style="border:none;background-color:white;font-size:18px;width:60px;" disabled></input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-2 mb-4">
+                        <div class="card border-left-info shadow">
+                            <div class="card-body">
+                                <div class="text font-weight-bold text-info text-uppercase">
+                                    BOOKED Plots:<input id="booked-plots" style="border:none;background-color:white;font-size:18px;width:60px;" disabled></input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-2 mb-4">
+                        <div class="card border-left-warning shadow">
+                            <div class="card-body">
+                                <div class="text font-weight-bold text-warning text-uppercase">
+                                    Blocked Plots:<input id="blocked-plots" style="border:none;background-color:white;font-size:18px;width:60px;" disabled></input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-2 mb-4">
+                        <div class="card border-left-dark shadow">
+                            <div class="card-body">
+                                <div class="text font-weight-bold text-dark text-uppercase">
+                                    Registered Plots:<input id="registered-plots" style="border:none;background-color:white;font-size:18px;width:60px;" disabled></input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card mb-1">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Plots List
+                            </div>
+                            <div class="card-body text-sm-center">
+                                <table class="table table-bordered table-hover" id="plotlisttable">
+                                    <thead>
+                                    <tr>
+                                        <th>Plot ID</th>
+                                        <th>Plot Size</th>
+                                        <th>Plot Facing</th>
+                                        <th>Plot Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col ">
+                        <div class="card ">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                Enquiries List
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-borderless table-hover" id="enquiriesTable">
+                                    <thead>
+                                    <tr>
+                                        <th>PlotID</th>
+                                        <th>Full Name</th>
+                                        <th>Contact No</th>
+                                        <th>Site Visit Date</th>
+                                        <th>Enquired Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col">
+
+
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div th:replace="footer"></div>
+</div>
+<script>
+    $(document).ready(function(){
+             var ventureName= $("select.ventureDropDownList").children("option:selected").val();
+             var href = '/plots/'+ventureName;
+             var plotStatusHref = '/plotstatus/'+ventureName;
+             console.log(href);
+             var availablePlotsCount=0,soldPlotsCount=0,blocked=0,booked=0,totalPlots=0,registered=0;
+
+             $('#plotstatus').attr('href', plotStatusHref);
+               $.get(href, function (plots, status) {
+                    totalPlots=plots.length;
+                    for(let i =0;i<plots.length;i++){
+                        var newRowContent = "<tr><td>"+plots[i].plotId+"</td><td>"+plots[i].plotSize+"</td><td>"+plots[i].facing+"</td><td>"+plots[i].pltStatus+"</td><td > <a href='/plot/"+ventureName+"?plotid="+plots[i].plotId+"' title='Update Plot' target='_blank'><i class='bi bi-pencil-square'></i></a></td></tr>"
+                        $("#plotlisttable tbody").append(newRowContent);
+                        if(plots[i].pltStatus == 'AVAILABLE'){
+                            availablePlotsCount ++;
+                        }
+                        if(plots[i].pltStatus == 'SOLD'){
+                            soldPlotsCount ++;
+                        }
+                        if(plots[i].pltStatus == 'BOOKED'){
+                            booked ++;
+                        }
+                        if(plots[i].pltStatus == 'BLOCKED'){
+                            blocked ++;
+                        }
+                        if(plots[i].pltStatus == 'REGISTERED'){
+                            registered ++;
+                        }
+                    }
+                    $('#plotlisttable').DataTable();
+                    $('#total-plots').val(totalPlots);
+                    $('#available-plots').val(availablePlotsCount);
+                    $('#sold-plots').val(soldPlotsCount);
+                    $('#booked-plots').val(booked);
+                    $('#blocked-plots').val(blocked);
+                    $('#registered-plots').val(registered);
+               });
+
+               var enquiryHref = '/enquiry?venture='+ventureName;
+               $.get(enquiryHref, function (ens, status) {
+                    for(let i =0;i<ens.length;i++){
+                      var status = ens[i].enquiryClosed ? 'Closed' : 'Open';
+                      console.log(status);
+                      var creationDateArr = ens[i].creationDate.split("T");
+                      var createDate = creationDateArr[0];
+                      var plotArr = ens[i].details.split(":::");
+                      var plotID = plotArr[1];
+                      var closeEnqHref= "enquiries/venture/"+ventureName+"/enquiry/"+ens[i].id;
+                      if(status=='Closed'){
+                        closeEnqHref="/";
+                      }
+                      var enquiryContent= "<tr><td>"+plotID +"</td><td>"+ens[i].userName +"</td><td>"+ens[i].phoneNumber +"</td><td>"+ens[i].siteVisitedDate +"</td><td>"+createDate+"</td><td>"+status+"</td><td> <a href="+closeEnqHref+" title='Close Enquiry' target='_blank'><i class='bi bi-pencil-square'></i></a>  </td></>tr>";
+                      $("#enquiriesTable tbody").append(enquiryContent);
+                    }
+                     $('#enquiriesTable').DataTable();
+               });
+
+
+    });
+</script>
+</body>
+</html>

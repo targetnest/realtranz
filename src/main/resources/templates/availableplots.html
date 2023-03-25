@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="author" content="Nagaraju Ukkalam"/>
+    <title>::Plots List::</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css"/>
+
+</head>
+<body class="sb-nav-fixed">
+<style>
+    #sidebarToggle{
+       display:none;
+    }
+    .navbar-nav{
+       margin-left:auto;
+    }
+
+</style>
+<div th:replace="header"></div>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_content">
+    </div>
+    <main>
+        <div class="container-fluid px-4 col-lg-6">
+            <br/>
+            <h3><b> [[${venture.description}]] </b> <a th:href="'/plotstatus/'+${ventureName}"
+                                                       class="btn btn-primary float-right" id="plotstatus"
+                                                       target="_blank">
+                Layout Status</a></span></h3><br/>
+            <div th:if="null != ${successEnq}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:inline="text" th:utext="${successEnq}"></span>
+                <button type="button" class="close" >
+                    <a th:href="'/availableplots/'+${venture.ventureName}"><span aria-hidden="true">&times;</span></a>
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-body text-sm-center">
+                    <table class="table table-bordered table-hover" id="availableplotlisttable">
+                        <thead>
+                        <tr>
+                            <th>Plot ID</th>
+                            <th>Area<i>(in Sqyds)</i></th>
+                            <th>Plot Facing</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="plot :${availablePlots}">
+                            <td th:text="${plot.plotId}"></td>
+                            <td th:text="${plot.plotSize}"></td>
+                            <td th:text="${plot.facing}"></td>
+                            <td sec:authorize="isAuthenticated()"
+                                th:if="${#authentication.getPrincipal().getUsername() == venture.owner.username }"><a
+                                    th:href="'/plot/'+${venture.ventureName}+'?plotid='+${plot.plotId}"
+                                    class="btn-sm btn btn-primary" target="_blank"><b style="color:white">Update
+                                Plot</b></a>
+                                This Plot: <b th:text="${plot.pltStatus}"></b>
+                            </td>
+                            <td sec:authorize="isAuthenticated()"
+                                th:if="${#authentication.getPrincipal().getUsername() != venture.owner.username }"><a
+                                    th:if="@{${plot.pltStatus}} == 'AVAILABLE'" th:href="@{/plot?(plotid=${plot.id})}"
+                                    class="btn-sm btn btn-primary enquiryButton" data-toggle="modal"
+                                    data-target="#exampleModal">Book Free Site Visit/Enquiry Plot</a>
+                                <b th:unless="@{${plot.pltStatus}} == 'AVAILABLE'"
+                                   th:text="'This Plot '+${plot.pltStatus}"
+                                   style="color:red"></b>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr/>
+                </div>
+            </div>
+
+            <div class="enquiryForm">
+                <form th:action="'/enquiry'" th:method="post" name="plot" class="form-inline">
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel1"
+                         aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel1">Book/Enquiry Plot:
+                                        [[${venture.description}]]</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3 row">
+                                        <label for="venture" class="col-sm-5 col-form-label">Venture :</label>
+                                        <div class="col-sm-7">
+                                            <b><input type="text" readonly class="form-control-plaintext" id="venture"
+                                                      th:value="${venture.ventureName}" name="venture"></b>
+
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="plotId" class="col-sm-5 col-form-label">Plot ID :</label>
+                                        <div class="col-sm-7">
+                                            <b><input type="text" readonly class="form-control-plaintext"
+                                                      id="plotId"></b>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="facing" class="col-sm-5 col-form-label">Plot Facing :</label>
+                                        <div class="col-sm-7">
+                                            <b><input type="text" readonly class="form-control-plaintext"
+                                                      id="facing"></b>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="pltStatus" class="col-sm-5 col-form-label">Plot Status :</label>
+                                        <div class="col-sm-7">
+                                            <b><input type="text" readonly class="form-control-plaintext"
+                                                      id="pltStatus"></b>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="plotsize" class="col-sm-5 col-form-label">Plot Size(<i>in SQYDs</i>)
+                                            :</label>
+                                        <div class="col-sm-7">
+                                            <b><input type="text" readonly class="form-control-plaintext" id="plotsize"></b>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="mb-3 row">
+                                        <label for="userName" class="col-sm-5 col-form-label">Full Name : </label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" id="userName" name="userName">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 row">
+                                        <label for="phoneNumber" class="col-sm-5 col-form-label">Phone Number : </label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="email" class="col-sm-5 col-form-label">Email : </label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" id="email" name="email">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="isSiteVisitRequired" class="col-sm-5 col-form-label">Site Visit?
+                                            : </label>
+                                        <div class="col-sm-7">
+                                            <input type="checkbox" class="form-control" id="isSiteVisitRequired"
+                                                   name="isSiteVisitRequired">
+                                        </div>
+                                    </div>
+
+                                    <div class="siteVisitedDate mb-3 row" style="display:none;">
+                                        <label for="siteVisitedDate" class="col-sm-5 col-form-label">Site Visit Date
+                                            : </label>
+                                        <div class="col-sm-7">
+                                            <input type="datetime-local" class="form-control" id="siteVisitedDate"
+                                                   name="siteVisitedDate">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" id="details" name="details" hidden>
+
+                                    <div class="mb-3 row">
+                                        <label for="description" class="col-sm-5 col-form-label">Any Details : </label>
+                                        <div class="col-sm-7">
+                                            <br/><textarea class="form-control" id="description" rows="2"
+                                                           name="description"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 row">
+                                        <label for="expectedPrice" class="col-sm-5 col-form-label">Expected Price<i>(SQYD)
+                                            <i
+                                                    class="bi bi-currency-rupee"> </i></i> : </label>
+                                        <div class="col-sm-7">
+                                            <input type="number" class="form-control" id="expectedPrice"
+                                                   name="expectedPrice">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Submit Enquiry</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </main>
+</div>
+<div th:replace="footer"></div>
+<script>
+
+             $(document).ready(function(){
+                $(' .enquiryButton').on('click', function(event){
+                    event.preventDefault();
+                    var href = $(this).attr('href');
+
+
+                    if(href != null) {
+
+                        $.get(href, function (plot, status) {
+
+                            $('.enquiryForm #plotId').val(plot.plotId);
+                            $('.enquiryForm #facing').val(plot.facing);
+                            $('.enquiryForm #details').val(plot.venture.ventureName+':::'+plot.plotId);
+                            $('.enquiryForm #pltStatus').val(plot.pltStatus);
+                            $('.enquiryForm #plotsize').val(plot.plotSize);
+
+                        });
+
+                        $('.enquiryForm #exampleModal').modal();
+                    }else{
+                        $('.enquiryForm #id').val('');
+                        $('.enquiryForm #plotId').val('');
+                        $('.enquiryForm #pltStatus').val('');
+                        $('.enquiryForm #exampleModal').modal();
+                    }
+                });
+                $('#availableplotlisttable').DataTable();
+                $('#isSiteVisitRequired').click(function() {
+                  $('.siteVisitedDate').toggle("slide");
+                });
+            });
+
+
+</script>
+</body>
+</html>

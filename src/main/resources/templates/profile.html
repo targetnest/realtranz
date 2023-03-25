@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="author" content="Nagaraju Ukkalam"/>
+    <title>Update Plot</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+</head>
+<body >
+<style>
+    #sidebarToggle{
+       display:none;
+    }
+    .navbar-nav{
+       margin-left:auto;
+    }
+
+</style>
+<div th:replace="header"></div><br/>
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-6 col-md-offset-3">
+            <br/><br/><br/>
+            <div th:if="null != ${userAddSuccess}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:inline="text" th:utext="${userAddSuccess}"></span>
+                <button type="button" class="close" >
+                    <a href="/profile"><span aria-hidden="true">&times;</span></a>
+                </button>
+            </div>
+            <div class="mb-3 row">
+                <h3><i class="fas fa-user fa-fw"> </i><span th:text="${userData.firstName}+', '+${userData.lastName}"></span></h3>
+                <!--<label  class="col-sm-5 col-form-label">Full Name :</label>
+                <div class="col-sm-7">
+                    <input type="text"  readonly class="form-control-plaintext" th:value="${userData.firstName}+', '+${userData.lastName}" />
+                </div>-->
+            </div>
+            <div class="mb-3 row">
+                <label  class="col-sm-5 col-form-label">Email ID :</label>
+                <div class="col-sm-7">
+                    <input type="text"  readonly class="form-control-plaintext" th:value="${userData.email_id}" />
+                </div>
+            </div>
+
+            <div class="mb-4 row">
+                <label   class="col-sm-5 col-form-label">Primary Number :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.phone1}" />
+                </div>
+            </div>
+
+            <div class="mb-4 row">
+                <label  class="col-sm-5 col-form-label">Secondary Number :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.phone2}" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label   class="col-sm-5 col-form-label">Occupation :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.occupation}" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label  class="col-sm-5 col-form-label">Nationality :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.nationality}"/>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label  class="col-sm-5 col-form-label">Address Line1 :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.addressLine1}"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label   class="col-sm-5 col-form-label">Address Line2 :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.addressLine2}" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label  class="col-sm-5 col-form-label">City :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.city}" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label   class="col-sm-5 col-form-label">State :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.state}" />
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label  class="col-sm-5 col-form-label">Pin Code :</label>
+                <div class="col-sm-7">
+                    <input type="text" readonly class="form-control-plaintext" th:value="${userData.pinNumber}"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:replace="footer"></div>
+</body>
+</html>

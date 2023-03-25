@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="author" content="Nagaraju Ukkalam"/>
+    <title>Update Plot</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+</head>
+<body >
+<style>
+    #sidebarToggle{
+       display:none;
+    }
+    .navbar-nav{
+       margin-left:auto;
+    }
+
+</style>
+<div th:replace="header"></div><br/>
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-2">
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                <!--<span aria-hidden="true">&times;</span>-->
+            </button>
+        </div>
+        <form th:action="'/close-enquiry'" th:method="post" id="formAwesome">
+
+            <div class="modal-body">
+                <div class="form-group row d-none"> <input type="text" name="id" th:value="${enquiryObj.id}"  hidden> </div>
+
+                <div class="form-group row d-none"> <input type="text" name="venture" th:value="${enquiryObj.venture}"  hidden> </div>
+                <div class="form-group row"><label class="col-md-6 col-form-label">Venture:::Plot</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="details"  th:value="${enquiryObj.details}" disabled></div>
+                </div>
+                <div class="form-group row"><label class="col-md-6 col-form-label">Enquiry Created Date</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="creationDate"  th:placeholder="${enquiryObj.creationDate}" disabled></div>
+                </div>
+                <div class="form-group row"><label class="col-md-6 col-form-label">CustomerName</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="userName"  th:value="${enquiryObj.userName}" th:placeholder="${enquiryObj.userName}" disabled></div>
+                </div>
+
+                <div class="form-group row"><label class="col-md-6 col-form-label">Customer Email:</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="email"  th:value="${enquiryObj.email}" th:placeholder="${enquiryObj.email}" disabled></div>
+                </div>
+                <div class="form-group row"><label class="col-md-6 col-form-label">Customer Phone:</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="phoneNumber"  th:value="${enquiryObj.phoneNumber}" th:placeholder="${enquiryObj.phoneNumber}" disabled></div>
+                </div>
+
+                <div th:if="null != ${enquiryObj.description} AND ${!#strings.isEmpty(enquiryObj.description)}" class="form-group row"><label class="col-md-6 col-form-label">Customer Comments</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="description"  th:value="${enquiryObj.description}" disabled></input></div>
+                </div>
+
+                <div class="form-group row"><label class="col-md-6 col-form-label">Message To Customer</label>
+                    <div class="col-md-6">
+                        <textarea class="form-control" name="closedComments"  rows="2"></textarea></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                <button type="submit" class="btn btn-primary">Close Enquiry</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:replace="footer"></div>
+</body>
+</html>

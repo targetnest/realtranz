@@ -1,0 +1,63 @@
+<!-- Modal -->
+<div class="modal fade" id="userActivityModal" tabindex="-1" role="dialog" aria-labelledby="userActivityModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content" style="min-width:550px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="userActivityModalLabel">Enquiries</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body col-xl-12">
+                <div class="card ">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Enquiries List
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless table-hover" id="enquiriesUserTable">
+                            <thead>
+                            <tr>
+                                <th>Venture Name</th>
+                                <th>PlotID</th>
+                                <th>Enquired Date</th>
+                                <th>Message From Management</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <script>
+                 $(document).ready(function(){
+                    console.log("asdaas");
+                    var href = "/enquiries/user/[[${userData.username}]]";
+                    console.log(href);
+                    $.get(href, function (ens, status) {
+                          for(let i =0;i<ens.length;i++){
+                              var status = ens[i].isEnquiryClosed ? 'Closed' : 'Open';
+                              var creationDateArr = ens[i].creationDate.split("T");
+                              var createDate = creationDateArr[0];
+                              var message = (null == ens[i].closedComments) ? 'ThankYou For Enquiry. Will Contact You Soon!!!' : ens[i].closedComments;
+                              var plotArr = ens[i].details.split(":::");
+                              var plotID = plotArr[1];
+                              var enquiryContent= "<tr><td>"+ens[i].venture +"</td><td>"+plotID +"</td><td>"+createDate+"</td><td style='font-size:13px;'>"+message+"</td></>tr>";
+                              $("#enquiriesUserTable tbody").append(enquiryContent);
+                           }
+                           $('#enquiriesUserTable').DataTable();
+                    });
+                  });
+            </script>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-primary" id="saveChangedPassword">Save changes</button>-->
+            </div>
+
+        </div>
+    </div>
+</div>
+</html>
